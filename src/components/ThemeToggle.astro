@@ -2,10 +2,12 @@
 import { Sun, Moon } from 'lucide-astro';
 
 /**
- * 主题切换按钮（Astro Island）
+ * 主题切换按钮 + 抽屉关闭交互（页面级 Island）
  * 同时承载两个页面级交互：
  * 1. 主题切换（点击 checkbox 切换 light/dark）
  * 2. 移动端抽屉关闭（点击带 data-close-drawer 的元素）
+ *
+ * Debug：使用 console.debug，DevTools 默认隐藏，需要开启 Verbose
  */
 
 const drawerId = 'nav-drawer';
@@ -17,26 +19,45 @@ const drawerId = 'nav-drawer';
   <Moon class="swap-on size-5" />
 </label>
 
-<script define:vars={{ drawerId }}>
+<script is:inline define:vars={{ drawerId }}>
   (function () {
-    // 1. 主题切换：同步 checkbox 状态
+    // ============ 主题切换 ============
     const root = document.documentElement;
     const controller = document.querySelector('.theme-controller');
-    if (controller) controller.checked = root.getAttribute('data-theme') === 'dark';
+    const currentTheme = root.getAttribute('data-theme');
+    if (controller) controller.checked = currentTheme === 'dark';
+
+    console.debug('[ThemeToggle] init', {
+      currentTheme: currentTheme,
+      checkboxChecked: controller ? controller.checked : null,
+    });
 
     document.addEventListener('change', (e) => {
-      if (e.target.classList && e.target.classList.contains('theme-controller')) {
-        const next = e.target.checked ? 'dark' : 'light';
+      const target = e.target;
+      if (target && target.classList && target.classList.contains('theme-controller')) {
+        const next = target.checked ? 'dark' : 'light';
         root.setAttribute('data-theme', next);
         localStorage.setItem('theme', next);
+        console.debug('[ThemeToggle] switched →', next);
       }
     });
 
-    // 2. 抽屉关闭：点击带 data-close-drawer 的元素自动收起 drawer
-    document.querySelectorAll('[data-close-drawer]').forEach((el) => {
+    // ============ 抽屉关闭 ============
+    const drawer = document.getElementById(drawerId);
+    const closers = document.querySelectorAll('[data-close-drawer]');
+
+    console.debug('[DrawerClose] init', {
+      drawerId: drawerId,
+      drawerFound: !! drawer,
+      closeTriggersCount: closers.length,
+    });
+
+    closers.forEach((el) => {
       el.addEventListener('click', () => {
-        const drawer = document.getElementById(drawerId);
-        if (drawer) drawer.checked = false;
+        if (drawer) {
+          drawer.checked = false;
+          console.debug('[DrawerClose] drawer closed by', el.tagName, el.textContent && el.textContent.trim());
+        }
       });
     });
   })();
