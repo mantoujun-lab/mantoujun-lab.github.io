@@ -1,0 +1,75 @@
+name: Auto Close Pull Requests
+
+on:
+  pull_request:
+    # PR 创建时立即触发
+    types: [opened]
+  # 允许从 Actions 页面手动触发
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  close-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if author is org member
+        id: check-member
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const author = context.payload.pull_request.user.login;
+
+            try {
+              // 检查 PR 作者是否为组织成员
+              await github.rest.orgs.checkMembershipForUser({
+                org: owner,
+                username: author,
+              });
+              core.setOutput('is_member', 'true');
+              core.info(`✓ ${author} 是 ${owner} 的成员，跳过关闭操作。`);
+            } catch (error) {
+              if (error.status === 404) {
+                core.setOutput('is_member', 'false');
+                core.info(`✗ ${author} 不是 ${owner} 的成员，将继续关闭 PR。`);
+              } else {
+                throw error;
+              }
+            }
+
+      - name: Close PR and add placeholder comment
+        if: steps.check-member.outputs.is_member != 'true'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = context.payload.pull_request.number;
+
+            // 发送占位符评论
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: prNumber,
+              body: [
+                '**此拉取请求将自动关闭**',
+                '',
+                '因为此仓库不接受任何形式的外部贡献',
+                '',
+                '### 为什么不允许贡献内容',
+                '- 此仓库部署的网站仅用于展示组织介绍',
+              ].join('\n'),
+            });
+
+            // 立即关闭 PR
+            await github.rest.pulls.update({
+              owner,
+              repo,
+              pull_number: prNumber,
+              state: 'closed',
+            });
+
+            console.log(`PR #${prNumber} 已关闭并发送占位符评论。`);
