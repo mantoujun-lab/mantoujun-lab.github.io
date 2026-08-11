@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
+/* Inter 字体包：v5 仅按特性拆分（wght/opsz/standard），不按字符子集 */
+@import "@fontsource-variable/inter";
+
+/* Inter 作为全局字体（含中英文回退栈）
+   中文回退：Win11 自带 Noto Sans CJK SC，不再打包中文 Web 字体
+   字体栈优先级：英文 Inter → 各系统默认中文字体 → 通用 sans-serif */
+html {
+  font-family:
+    "Inter Variable", "Inter",
+    "Noto Sans CJK SC", "Noto Sans SC",
+    -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-feature-settings: "cv11", "ss01", "ss03";
+}
+
+/* 禁用移动端点击高亮（a/button 点击时的半透明矩形） */
+a,
+button,
+[role="button"],
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 尊重用户的动效偏好 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,17 +1,139 @@
 ---
+import '../styles/global.css';
 
+const navItems = [
+  { label: '项目', href: '#projects' },
+  { label: '联系', href: '#contact' },
+];
+
+const projects = [
+  { title: '项目一', desc: '简短描述。', tags: ['Tag'], href: 'https://github.com/mantoujun-lab' },
+  { title: '项目二', desc: '简短描述。', tags: ['Tag'], href: 'https://github.com/mantoujun-lab' },
+  { title: '项目三', desc: '简短描述。', tags: ['Tag'], href: 'https://github.com/mantoujun-lab' },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>mantoujun's Lab</title>
+    <meta name="description" content="mantoujun's lab — 开源协作实验室" />
+    {/* 尽早设置主题，避免暗色模式闪烁（FOUC） */}
+    <script is:inline>
+      (function () {
+        var t = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-base-100 text-base-content antialiased">
+    <div class="drawer drawer-end">
+      <input id="nav-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col">
+        <!-- 顶部导航 -->
+        <header class="navbar bg-base-100/80 backdrop-blur sticky top-0 z-30 border-b border-base-200 px-4 lg:px-8">
+          <div class="flex-1 lg:flex-none lg:mr-auto">
+            <a href="#" class="btn btn-ghost px-2 text-xl font-bold tracking-tight">
+              <img
+                src="https://avatars.githubusercontent.com/mantoujun-lab?s=64"
+                alt="mantoujun-lab"
+                width="32"
+                height="32"
+                class="size-8 rounded-lg shadow-sm"
+              />
+              <span class="hidden sm:inline">mantoujun's lab</span>
+            </a>
+          </div>
+
+          <nav class="hidden lg:flex flex-none items-center gap-1">
+            {navItems.map((item) => (
+              <a href={item.href} class="btn btn-ghost btn-sm">{item.label}</a>
+            ))}
+          </nav>
+
+          <div class="flex-none gap-2">
+            <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm" aria-label="切换主题">
+              <input type="checkbox" class="theme-controller" value="dark" />
+              <svg class="swap-off size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+              <svg class="swap-on size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            </label>
+            <label for="nav-drawer" class="btn btn-ghost btn-circle btn-sm lg:hidden" aria-label="打开菜单">
+              <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </label>
+          </div>
+        </header>
+
+        <main class="flex-1">
+          <!-- Hero -->
+          <section class="hero bg-gradient-to-b from-primary/10 to-base-100 py-20 lg:py-28">
+            <div class="hero-content !flex-col !items-center text-center max-w-3xl">
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight mb-8">
+                mantoujun's lab
+              </h1>
+              <p class="text-base-content/70 text-lg leading-relaxed mb-10">
+                用最小可行方案落地每一个想法。
+              </p>
+              <div class="flex flex-col items-center gap-3">
+                <a href="#projects" class="btn btn-primary btn-wide">查看项目</a>
+                <a href="https://github.com/mantoujun-lab" target="_blank" rel="noopener" class="btn btn-outline btn-wide">GitHub</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- 项目 -->
+          <section id="projects" class="py-20 px-4 lg:px-8">
+            <div class="max-w-5xl mx-auto">
+              <h2 class="text-3xl lg:text-4xl font-bold mb-10 text-center">项目</h2>
+              <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {projects.map((p) => (
+                  <a href={p.href} target="_blank" rel="noopener" class="card bg-base-100 border border-base-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                    <div class="card-body">
+                      <h3 class="card-title text-lg">{p.title}</h3>
+                      <p class="text-base-content/70 text-sm">{p.desc}</p>
+                      <div class="flex flex-wrap gap-1.5 mt-2">
+                        {p.tags.map((t) => <span class="badge badge-sm badge-outline">{t}</span>)}
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <!-- 联系 -->
+          <section id="contact" class="py-20 px-4 lg:px-8 bg-base-200/40">
+            <div class="max-w-3xl mx-auto text-center">
+              <h2 class="text-3xl lg:text-4xl font-bold mb-4">联系</h2>
+              <a href="https://github.com/mantoujun-lab" target="_blank" rel="noopener" class="btn btn-primary">访问 GitHub</a>
+            </div>
+          </section>
+        </main>
+
+        <footer class="footer footer-center p-8 bg-base-200 text-base-content/60 border-t border-base-200">
+          <p class="text-sm">© {new Date().getFullYear()} mantoujun's lab</p>
+        </footer>
+      </div>
+
+      <!-- 移动端抽屉 -->
+      <div class="drawer-side z-40">
+        <label for="nav-drawer" class="drawer-overlay" aria-label="关闭菜单"></label>
+        <aside class="min-h-full w-72 bg-base-100 border-l border-base-200 p-4">
+          <nav class="flex flex-col gap-1">
+            {navItems.map((item) => (
+              <a href={item.href} class="btn btn-ghost justify-start" data-close-drawer>{item.label}</a>
+            ))}
+          </nav>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </body>
 </html>
