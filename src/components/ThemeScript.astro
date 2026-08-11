@@ -1,0 +1,15 @@
+---
+/**
+ * 防暗色模式闪烁：尽早把 data-theme 设置到 <html> 上
+ * 必须在 <head> 最前面、是同步阻塞的、不能 defer / async
+ * 不能做成 Island（Islands 需要客户端 JS 加载，太晚）
+ */
+---
+<script is:inline>
+  (function () {
+    var t =
+      localStorage.getItem('theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>

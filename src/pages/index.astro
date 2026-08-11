@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
-import { Sun, Moon, Menu } from 'lucide-astro';
+import { Menu } from 'lucide-astro';
 import { Github } from 'simple-icons-astro';
+import ThemeScript from '../components/ThemeScript.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 const navItems = [
   { label: '项目', href: '#projects' },
@@ -29,13 +31,7 @@ const projects = [
     <meta name="generator" content={Astro.generator} />
     <title>mantoujun's Lab</title>
     <meta name="description" content="mantoujun's lab — 开源协作实验室" />
-    {/* 尽早设置主题，避免暗色模式闪烁（FOUC） */}
-    <script is:inline>
-      (function () {
-        var t = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', t);
-      })();
-    </script>
+    <ThemeScript />
   </head>
   <body class="min-h-screen bg-base-100 text-base-content antialiased">
     <div class="drawer drawer-end">
@@ -63,11 +59,7 @@ const projects = [
           </nav>
 
           <div class="flex-none gap-2">
-            <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm" aria-label="切换主题">
-              <input type="checkbox" class="theme-controller" value="dark" />
-              <Sun class="swap-off size-5" />
-              <Moon class="swap-on size-5" />
-            </label>
+            <ThemeToggle />
             <label for="nav-drawer" class="btn btn-ghost btn-circle btn-sm lg:hidden" aria-label="打开菜单">
               <Menu class="size-5" />
             </label>
@@ -141,8 +133,6 @@ const projects = [
       </div>
     </div>
 
-    <script>
-      import '../scripts/main.ts';
-    </script>
+    <!-- 交互逻辑已拆分到 ThemeToggle / DrawerClose Island 组件，此处无需 script -->
   </body>
 </html>

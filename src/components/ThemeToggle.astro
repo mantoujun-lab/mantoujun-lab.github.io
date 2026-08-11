@@ -1,0 +1,43 @@
+---
+import { Sun, Moon } from 'lucide-astro';
+
+/**
+ * 主题切换按钮（Astro Island）
+ * 同时承载两个页面级交互：
+ * 1. 主题切换（点击 checkbox 切换 light/dark）
+ * 2. 移动端抽屉关闭（点击带 data-close-drawer 的元素）
+ */
+
+const drawerId = 'nav-drawer';
+---
+
+<label class="swap swap-rotate btn btn-ghost btn-circle btn-sm" aria-label="切换主题">
+  <input type="checkbox" class="theme-controller" value="dark" />
+  <Sun class="swap-off size-5" />
+  <Moon class="swap-on size-5" />
+</label>
+
+<script define:vars={{ drawerId }}>
+  (function () {
+    // 1. 主题切换：同步 checkbox 状态
+    const root = document.documentElement;
+    const controller = document.querySelector('.theme-controller');
+    if (controller) controller.checked = root.getAttribute('data-theme') === 'dark';
+
+    document.addEventListener('change', (e) => {
+      if (e.target.classList && e.target.classList.contains('theme-controller')) {
+        const next = e.target.checked ? 'dark' : 'light';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      }
+    });
+
+    // 2. 抽屉关闭：点击带 data-close-drawer 的元素自动收起 drawer
+    document.querySelectorAll('[data-close-drawer]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const drawer = document.getElementById(drawerId);
+        if (drawer) drawer.checked = false;
+      });
+    });
+  })();
+</script>
