@@ -15,8 +15,30 @@ jobs:
   close-pr:
     runs-on: ubuntu-latest
     steps:
+      # 信任的机器人：Dependabot、Renovate 等不受此规则限制
+      - name: Check if author is trusted bot
+        id: check-trusted
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const author = context.payload.pull_request.user.login.toLowerCase();
+
+            // Dependabot / GitHub Actions Bot 等受信机器人
+            const trustedBots = [
+              'dependabot[bot]',
+              'github-actions[bot]',
+            ];
+
+            if (trustedBots.includes(author)) {
+              core.setOutput('is_trusted_bot', 'true');
+              core.info(`✓ ${author} 是受信机器人，跳过关闭操作。`);
+            } else {
+              core.setOutput('is_trusted_bot', 'false');
+            }
+
       - name: Check if author is org member
         id: check-member
+        if: steps.check-trusted.outputs.is_trusted_bot != 'true'
         uses: actions/github-script@v9
         with:
           script: |
@@ -41,7 +63,7 @@ jobs:
             }
 
       - name: Close PR and add placeholder comment
-        if: steps.check-member.outputs.is_member != 'true'
+        if: steps.check-trusted.outputs.is_trusted_bot != 'true' && steps.check-member.outputs.is_member != 'true'
         uses: actions/github-script@v9
         with:
           script: |
