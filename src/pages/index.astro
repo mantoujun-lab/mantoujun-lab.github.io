@@ -22,12 +22,13 @@ const projects = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    {/* favicon：用压缩后的 logo.webp（4.3KB），不支持的浏览器回退到 logo-nobg.png */}
+    <link rel="icon" type="image/webp" href="/logo-nobg.webp" />
+    <link rel="icon" type="image/png" href="/logo-nobg.png" />
     {/* 字体预加载：让浏览器在解析 CSS 前就开始下载字体，首字渲染提速 ~400ms */}
     <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
-    {/* 组织头像预加载：导航栏立刻能显示图标 */}
-    <link rel="preload" href="https://avatars.githubusercontent.com/mantoujun-lab?s=64" as="image" crossorigin />
+    {/* 组织 logo 预加载：导航栏立刻能显示图标 */}
+    <link rel="preload" href="/logo.webp" as="image" type="image/webp" />
     <meta name="generator" content={Astro.generator} />
     <title>mantoujun's Lab</title>
     <meta name="description" content="mantoujun's lab — 开源协作实验室" />
@@ -41,13 +42,18 @@ const projects = [
         <header class="navbar bg-base-100/80 backdrop-blur sticky top-0 z-30 border-b border-base-200 px-4 lg:px-8">
           <div class="flex-1 lg:flex-none lg:mr-auto">
             <a href="#" class="btn btn-ghost px-2 text-xl font-bold tracking-tight">
-              <img
-                src="https://avatars.githubusercontent.com/mantoujun-lab?s=64"
-                alt="mantoujun-lab"
-                width="32"
-                height="32"
-                class="size-8 rounded-lg shadow-sm"
-              />
+              <picture>
+                <source srcset="/logo.webp" type="image/webp" />
+                <img
+                  src="/logo.png"
+                  alt="mantoujun-lab"
+                  width="32"
+                  height="32"
+                  class="size-8 rounded-lg shadow-sm"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               <span class="hidden sm:inline">mantoujun's lab</span>
             </a>
           </div>
@@ -74,7 +80,7 @@ const projects = [
                 mantoujun's lab
               </h1>
               <p class="text-base-content/70 text-lg leading-relaxed mb-10">
-                用最小可行方案落地每一个想法。
+                用最小可行方案落地每一个想法
               </p>
               <div class="flex flex-col items-center gap-3">
                 <a href="#projects" class="btn btn-primary btn-wide">查看项目</a>
