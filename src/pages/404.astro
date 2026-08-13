@@ -1,0 +1,103 @@
+---
+import '../styles/global.css';
+import { Menu } from 'lucide-astro';
+import { Github } from 'simple-icons-astro';
+import ThemeScript from '../components/ThemeScript.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+const navItems = [
+  { label: '项目', href: '/#projects' },
+  { label: '联系', href: '/#contact' },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/webp" href="/logo-nobg.webp" />
+    <link rel="icon" type="image/png" href="/logo-nobg.png" />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/logo.webp" as="image" type="image/webp" />
+    <meta name="generator" content={Astro.generator} />
+    <title>404 - 页面未找到 | mantoujun's lab</title>
+    <meta name="description" content="抱歉，你访问的页面不存在。" />
+    <ThemeScript />
+  </head>
+  <body class="min-h-screen bg-base-100 text-base-content antialiased">
+    <div class="drawer drawer-end">
+      <input id="nav-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col">
+        <!-- 顶部导航 -->
+        <header class="navbar bg-base-100/80 backdrop-blur sticky top-0 z-30 border-b border-base-200 px-4 lg:px-8">
+          <div class="flex-1 lg:flex-none lg:mr-auto">
+            <a href="/" class="btn btn-ghost px-2 text-xl font-bold tracking-tight">
+              <picture>
+                <source srcset="/logo.webp" type="image/webp" />
+                <img
+                  src="/logo.png"
+                  alt="mantoujun-lab"
+                  width="32"
+                  height="32"
+                  class="size-8 rounded-lg shadow-sm"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <span class="hidden sm:inline">mantoujun's lab</span>
+            </a>
+          </div>
+
+          <nav class="hidden lg:flex flex-none items-center gap-1">
+            {navItems.map((item) => (
+              <a href={item.href} class="btn btn-ghost btn-sm">{item.label}</a>
+            ))}
+          </nav>
+
+          <div class="flex-none gap-2">
+            <ThemeToggle />
+            <label for="nav-drawer" class="btn btn-ghost btn-circle btn-sm lg:hidden" aria-label="打开菜单">
+              <Menu class="size-5" />
+            </label>
+          </div>
+        </header>
+
+        <main class="flex-1 flex items-center justify-center px-4 py-20">
+          <div class="text-center max-w-2xl">
+            <h1 class="text-7xl sm:text-8xl lg:text-9xl font-extrabold tracking-tight text-primary mb-4">
+              404
+            </h1>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4">页面未找到</h2>
+            <p class="text-base-content/70 text-lg leading-relaxed mb-10">
+              抱歉，你访问的页面不存在或已被移除。
+            </p>
+            <div class="flex flex-col items-center gap-3">
+              <a href="/" class="btn btn-primary btn-wide">返回首页</a>
+              <a href="https://github.com/mantoujun-lab" target="_blank" rel="noopener" class="btn btn-outline btn-wide">
+                <Github class="size-5" />
+                GitHub
+              </a>
+            </div>
+          </div>
+        </main>
+
+        <footer class="footer footer-center p-8 bg-base-200 text-base-content/60 border-t border-base-200">
+          <p class="text-sm">© {new Date().getFullYear()} mantoujun's lab</p>
+        </footer>
+      </div>
+
+      <!-- 移动端抽屉 -->
+      <div class="drawer-side z-40">
+        <label for="nav-drawer" class="drawer-overlay" aria-label="关闭菜单"></label>
+        <aside class="min-h-full w-72 bg-base-100 border-l border-base-200 p-4">
+          <nav class="flex flex-col gap-1">
+            {navItems.map((item) => (
+              <a href={item.href} class="btn btn-ghost justify-start" data-close-drawer>{item.label}</a>
+            ))}
+          </nav>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>
