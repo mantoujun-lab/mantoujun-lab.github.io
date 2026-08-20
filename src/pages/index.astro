@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { Menu } from 'lucide-astro';
 import { Github } from 'simple-icons-astro';
+import { Qq } from 'simple-icons-astro';
 import ThemeScript from '../components/ThemeScript.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 
@@ -11,9 +12,8 @@ const navItems = [
 ];
 
 const projects = [
-  { title: '项目一', desc: '简短描述。', tags: ['Tag'], href: 'https://github.com/mantoujun-lab' },
-  { title: '项目二', desc: '简短描述。', tags: ['Tag'], href: 'https://github.com/mantoujun-lab' },
-  { title: '项目三', desc: '简短描述。', tags: ['Tag'], href: 'https://github.com/mantoujun-lab' },
+  { title: 'Chathook', desc: '一个简单的聊天式Webhook框架', tags: ['Python', 'UV', 'Nuxt'], href: 'https://github.com/mantoujun-lab/Chathook' },
+  { title: '班级网站', desc: '一个用于展示班级的简单网站', tags: ['11ty', 'SCSS', 'JavaScript'], href: 'https://github.com/mantoujun-lab/class-website' },
 ];
 ---
 
@@ -116,13 +116,16 @@ const projects = [
           <section id="contact" class="py-20 px-4 lg:px-8 bg-base-200/40">
             <div class="max-w-3xl mx-auto text-center">
               <h2 class="text-3xl lg:text-4xl font-bold mb-4">联系</h2>
-              <a href="https://github.com/mantoujun-lab" target="_blank" rel="noopener" class="btn btn-primary">访问 GitHub</a>
+              <div class="flex flex-wrap justify-center gap-3">
+                <a href="https://github.com/orgs/mantoujun-lab/discussions" target="_blank" rel="noopener" class="btn btn-primary"><Github class="size-5" />Github Discussions</a>
+                <a href="https://qm.qq.com/q/l5d6VyGD9C" target="_blank" rel="noopener" class="btn btn-primary"><Qq class="size-5" />QQ群</a>
+              </div>
             </div>
           </section>
         </main>
 
         <footer class="footer footer-center p-8 bg-base-200 text-base-content/60 border-t border-base-200">
-          <p class="text-sm">© {new Date().getFullYear()} mantoujun's lab</p>
+          <p class="text-sm">&copy; {new Date().getFullYear()} mantoujun's lab</p>
         </footer>
       </div>
 
