@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.2.4",
+    "astro": "^7.2.9",
     "astro-minify-html-swc": "^0.1.12",
-    "daisyui": "^5.7.20",
+    "daisyui": "^5.7.22",
     "lucide-astro": "^0.556.0",
     "sharp": "^0.35.3",
     "simple-icons-astro": "^16.1.0",
